@@ -40,6 +40,7 @@ namespace Clustering
                 app.UseHsts();
             }
 
+            app.UseMvcWithDefaultRoute();
             app.UseHttpsRedirection();
             app.UseMvc();
         }
