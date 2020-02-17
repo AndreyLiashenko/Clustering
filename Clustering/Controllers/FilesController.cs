@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using Clustering.Services.CsvRead;
+using Csv;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Syncfusion.XlsIO;
 
 namespace Clustering.Controllers
 {
@@ -12,36 +11,19 @@ namespace Clustering.Controllers
     [ApiController]
     public class FilesController : ControllerBase
     {
-        [HttpPost]
-        public async Task<ActionResult<string>> Post([FromForm(Name = "file")] IFormFile file)
+        private readonly IGetScvRows _getScvRows;
+
+        public FilesController(IGetScvRows getScvRows)
         {
-            var stream = file.OpenReadStream();
+            _getScvRows = getScvRows;
+        }
 
-            ExcelEngine excelEngine = new ExcelEngine();
+        [HttpPost]
+        public async Task<ActionResult> Post([FromForm(Name = "file")] IFormFile file)
+        {
+            var lines = _getScvRows.GetLines(file);
 
-            IApplication application = excelEngine.Excel;
-
-            IWorkbook workbook = application.Workbooks.Open(stream);
-
-            IWorksheet worksheet = workbook.Worksheets[0];
-
-            int NumberOfTheRows = worksheet.Rows.Count();
-            int NumberOfTheColums = worksheet.Columns.Count();
-
-            List<string> Elements = new List<string>();
-
-            List<double> result = new List<double>();
-
-            for (int row = 2; row <= NumberOfTheRows; row++)
-            {
-                for (int col = 2; col <= NumberOfTheColums; col++)
-                {
-                    Elements.Add(string.Format("{0: 0.0}", worksheet.GetValueRowCol(row, col)));
-                    result = Elements.Select(x => double.Parse(x)).ToList();
-                }
-            }
-
-            return NoContent();
+           return NoContent();
         }
     }
 }
