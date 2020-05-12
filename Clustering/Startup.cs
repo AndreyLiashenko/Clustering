@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Clustering.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +29,7 @@ namespace Clustering
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddCors();
 
             services.AddRepositories();
         }
@@ -42,10 +45,27 @@ namespace Clustering
             {
                 app.UseHsts();
             }
+            
+            app.UseHttpsRedirection();
+
+            app.UseCors(builder => builder
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowCredentials()
+            .AllowAnyMethod());
+
+            app.UseFileServer();
+            app.UseStaticFiles();
+
+            app.UseMvc();
 
             app.UseMvcWithDefaultRoute();
-            app.UseHttpsRedirection();
-            app.UseMvc();
+
+            app.Run(async (context) =>
+            {
+                context.Response.ContentType = "text/html";
+                await context.Response.SendFileAsync(Path.Combine(env.WebRootPath, "index.html"));
+            });
         }
     }
 }
