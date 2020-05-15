@@ -17,6 +17,10 @@ export class FunctionPlotComponent implements OnInit {
   @Input() centroids: Centroid;
   gaussResponse: GaussResponse[] =[];
   data: PlotFunctionModel[] = [];
+  x1: number;
+  x2: number;
+  y1: number = -0.1;
+  y2: number = 1;
   axis: number;
 
   constructor(private kmeansService: KmeansService) { 
@@ -43,10 +47,9 @@ export class FunctionPlotComponent implements OnInit {
 
    execPlotFunction(data: PlotFunctionModel[]){
     const root = document.querySelector("#root");
-    console.log('data', this.data);
     functionPlot({
       target: root,
-      yAxis: { domain: [-0.5, 1.2] },
+      yAxis: { domain: [this.y1, this.y2] },
       xAxis: { domain: [1200, 3300] },
       tip: {
         renderer: function() {}
@@ -57,12 +60,11 @@ export class FunctionPlotComponent implements OnInit {
    }
 
     mapData(response: GaussResponse[]) : PlotFunctionModel[]{
-    //  if(this.data.length != 0){
-    //    this.data = [];
-    //  }
+
         var arr : PlotFunctionModel[] = [];
         for(var item of response){
             var model = new PlotFunctionModel();
+            console.log('sigma',item.sigma);
             model.fn = `exp(-((${item.mathWaiting}-x)^2)/${item.sigma})`;
             model.derivative = {
               fn: "2 * x",
@@ -70,7 +72,29 @@ export class FunctionPlotComponent implements OnInit {
             }
             arr.push(model);
         }
-        console.log('arr', arr);
         return arr;
+   }
+
+   changeScope(){
+    const root = document.querySelector("#root");
+    console.log('y1', this.y1);
+    console.log('y2', this.y2);
+    console.log('x1', this.x1);
+    console.log('x2', this.x2);
+    functionPlot({
+      target: root,
+      yAxis: { domain: [this.y1, this.y2] },
+      xAxis: { domain: [this.x1, this.x2] },
+      tip: {
+        renderer: function() {}
+      },
+      grid: true,
+      data: this.data
+    })
+
+    // this.x1 = 0;
+    // this.x2 = 0;
+    // this.y1 = 0;
+    // this.y2 = 0;
    }
 }

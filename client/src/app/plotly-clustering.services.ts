@@ -91,6 +91,11 @@ export class PlotlyClusteringService{
   }
 
  allClustering(listOfPoint: Cluster[]) :Graph {
+     if(this.data != 0){
+         for(var i in this.data){
+             this.data.splice(i,1);
+         }
+     }
     for(let item of listOfPoint){
         let data1 = {
           x: this.unpack(item.listOfPoint, 'x'),

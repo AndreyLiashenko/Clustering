@@ -25,7 +25,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit(){
       this.graph = new Graph();
-      console.log('start init')
       this.graph =  this.plotlyClusteringService.oneClustering('rgb(23, 190, 207)',[{x: 1, y: 7, z: 3}]);
   }
 
