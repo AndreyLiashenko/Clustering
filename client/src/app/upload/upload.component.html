@@ -1,0 +1,18 @@
+<div class="row" style="margin-bottom:15px;">
+    <div>
+        <input type="text" placeholder="Number of clusters" [(ngModel)]="numberOfCluster">
+        <button (click)="emitNumberOfCluster()">Initialize</button>
+    </div>
+
+        <input type="file" #file placeholder="Choose file" (change)="getPoints(file.files)"style="display: none">
+        <button type="button" class="btn btn-success" (click)="file.click()">Upload file</button>
+    <div class="col-md-4">
+        <span class="upload" *ngIf="progress > 0">
+            {{progress}}%
+        </span>
+
+        <span class="upload" *ngIf="message">
+            {{message}}
+        </span>
+    </div>
+</div>

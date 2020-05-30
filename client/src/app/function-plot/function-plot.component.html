@@ -1,0 +1,14 @@
+<div id="root"></div>
+
+<div *ngIf="centroids.centroid?.length > 0">
+    <input type="text" placeholder="Enter the axis" [(ngModel)]="axis">
+    <button (click)="buildGraph()">Build graph</button>
+</div>
+
+<div *ngIf="data.length > 0">
+    <input type="text" placeholder="Start X" [(ngModel)]="x1">
+    <input type="text" placeholder="End X" [(ngModel)]="x2">
+    <!-- <input type="text" placeholder="Start Y" [(ngModel)]="y1">
+    <input type="text" placeholder="End Y" [(ngModel)]="y2"> -->
+    <button (click)="changeScope()">Change Scope</button>
+</div>
