@@ -30,11 +30,9 @@ namespace Clustering.Controllers
         [Route("api/cleanse")]
         [HttpPost]
         public List<SampleData> Post([FromForm(Name = "file")] IFormFile file, string cleanseParams)
-        //public List<SampleData> Post([FromBody] CleanseQuery query)
         {
             var request = this.Request;
             var test = _getScvRows.GetLines(file);
-            //var parameters = cleanseParams;
             var parameters = !string.IsNullOrEmpty(cleanseParams) ? JsonConvert.DeserializeObject<CleanseParameters>(cleanseParams) : new CleanseParameters();
 
             var lines = test.Transform().Select(x => new SampleData
@@ -64,12 +62,24 @@ namespace Clustering.Controllers
 
         private void CleanData(CleanseParameters parameters)
         {
+            if (parameters.AutoCleansing)
+            {
+                InitializeParams();
+            }
+
             if (parameters.FilterData)
                 FilterData();
             if (parameters.ReplaceMissingValue)
                 ReplaceMissingValue();
             if (parameters.NormalizeData)
                 NormalizeData();
+            if (parameters.RemoveDublicates)
+                RemoveDublicates();
+        }
+
+        private void InitializeParams()
+        {
+            
         }
 
         private void NormalizeData()
@@ -99,6 +109,11 @@ namespace Clustering.Controllers
         private void FilterData()
         {
             _data = _mlContext.Data.FilterRowsByColumn(_data, "ProcessFrequency", lowerBound: 1200, upperBound: 2900);
+        }
+
+        private void RemoveDublicates()
+        {
+            //_data = 
         }
 
         public class DataVector

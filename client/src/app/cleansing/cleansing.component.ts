@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-// import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-cleansing',
@@ -12,7 +11,7 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 export class CleansingComponent implements OnInit {
 
   public fileToUpload: File = null;
-  public query: CleanseParameters = new CleanseParameters(false, false, false);
+  public query: CleanseParameters = new CleanseParameters(true);
 
   constructor(
     private http: HttpClient
@@ -28,14 +27,16 @@ export class CleansingComponent implements OnInit {
 
   submit(body: NgForm){
     const cleanseParams = 
-    `{'FilterData' : ${this.query.FilterData}, 
+    `{'AutoCleansing' : ${this.query.AutoCleansing}, 
+    'FilterData' : ${this.query.FilterData}, 
     'ReplaceMissingValue': ${this.query.ReplaceMissingValue}, 
-    'NormalizeData': ${this.query.NormalizeData}}`
+    'NormalizeData': ${this.query.NormalizeData},
+    'RemoveDublicates': ${this.query.RemoveDublicates}}`
 
 
     const data = new FormData();
      data.append('file', this.fileToUpload, this.fileToUpload.name)
-    this.http.post('http://localhost:5000/api/cleanse', data, 
+    this.http.post('http://localhost:3921/api/cleanse', data, 
     {params: new HttpParams().set('cleanseParams', cleanseParams),
     reportProgress: true, 
     observe: 'events',
@@ -54,9 +55,15 @@ export class CleansingComponent implements OnInit {
 
 export class CleanseParameters {
   constructor(
-  public FilterData: boolean,
-  public ReplaceMissingValue: boolean,
-  public NormalizeData: boolean)
-  { }
+  public AutoCleansing: boolean)  {
+    this.FilterData = !AutoCleansing;
+    this.ReplaceMissingValue = !AutoCleansing;
+    this.NormalizeData = !AutoCleansing;
+    this.RemoveDublicates = !AutoCleansing;
+  }
+  public FilterData: boolean;
+  public ReplaceMissingValue: boolean;
+  public NormalizeData: boolean;
+  public RemoveDublicates: boolean;
 }
 

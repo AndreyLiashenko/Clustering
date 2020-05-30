@@ -13,9 +13,8 @@ export class KmeansService{
     apiUrl: string;
 	constructor(private http: HttpClient) {}
 
-    getPoints( files: any, numberOfClusters: number) : Observable<HttpEvent<KmeansModel>>{
+    getPoints( fileToUpload: any, numberOfClusters: number) : Observable<HttpEvent<KmeansModel>>{
 
-        let fileToUpload = <File>files[0];
         const formData = new FormData();
 		formData.append('file', fileToUpload, fileToUpload.name);
         return this.http.post<KmeansModel>('http://localhost:3921/api/kmeans/frontModel',formData, 
