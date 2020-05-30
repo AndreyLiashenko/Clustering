@@ -1,21 +1,8 @@
-<!-- <div>
-  <input type="text" placeholder="Название" [(ngModel)]="title">
-  <button (click)="addTodo()">Добавить</button>
-  <button (click)="fetchTodos()">Загрузить</button>
-</div>
-
-<div *ngFor="let todo of todos">
-    {{todo.title}}
-    {{todo.completed}}
-</div> -->
-
-<h1>Angular Router App</h1>
-<!-- This nav gives you links to click, which tells the router which route to use (defined in the routes constant in  AppRoutingModule) -->
+<h1 class="header">DATA CLUSTERING</h1>
 <nav>
   <ul>
     <li><a routerLink="/cleanse" routerLinkActive="active">Data Cleansing</a></li>
     <li><a routerLink="/cluster" routerLinkActive="active">Clustering</a></li>
   </ul>
 </nav>
-<!-- The routed views render in the <router-outlet>-->
 <router-outlet></router-outlet>

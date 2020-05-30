@@ -1,13 +1,32 @@
 <plotly-plot [data]="graph.data" [layout]="graph.layout"></plotly-plot>
-<hr>
+<!-- <hr> -->
 <app-upload (numberOfClusterEmit)="initialNumber($event)" (onUploadFinished)="updateClusters($event)"></app-upload>
 
-<div *ngIf="listOfCluster?.length > 0">
-  <select (change)="onChange($event)">
+<div class="form" *ngIf="listOfCluster?.length > 0">
+  <select class="custom-select" (change)="onChange($event)">
     <option *ngFor="let item of listOfCluster" [value]="item.clusterId">Cluster {{item.clusterId}}</option>
   </select>
 </div>
 
-<button *ngIf="isOneCluster" (click)="showAllClusters()">Show all clusters</button>
+<button class="btn-default" *ngIf="isOneCluster" (click)="showAllClusters()" style="margin: 0 50px;">Show all clusters</button>
+<!-- 
+<app-function-plot [centroids]="centroids"></app-function-plot> -->
 
-<app-function-plot [centroids]="centroids"></app-function-plot>
+<div class="form">
+  
+  <div id="root"></div>
+  
+  <div >
+    <input type="text" placeholder="Enter the axis" [(ngModel)]="axis">
+    <button class="btn-default" (click)="buildGraph()">Build graph</button>
+  </div>
+  
+  <div *ngIf="data.length > 0">
+    <input type="text" placeholder="Start X" [(ngModel)]="x1">
+    <input type="text" placeholder="End X" [(ngModel)]="x2">
+    <!-- <input type="text" placeholder="Start Y" [(ngModel)]="y1">
+      <input type="text" placeholder="End Y" [(ngModel)]="y2"> -->
+      <button class="btn-default" (click)="changeScope()">Change Scope</button>
+    </div>
+
+</div>

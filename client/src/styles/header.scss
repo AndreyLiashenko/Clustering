@@ -1,0 +1,36 @@
+.header {
+    padding: 60px;
+    margin: 0;
+    text-align: center;
+    background:$basic;
+    color: $menu-text;
+    font-size: 30px;
+  }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: $menu;
+  }
+  
+  li {
+    float: left;
+  }
+  
+  li a {
+    display: block;
+    color: $menu-text;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  
+  li a:hover {
+    background-color: $highlight;
+  }
+
+  .active {
+    background-color: $basic;
+  }

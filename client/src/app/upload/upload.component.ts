@@ -13,6 +13,7 @@ export class UploadComponent implements OnInit {
   public message: string;
   public progress: number;
   public numberOfCluster: number;
+  public fileToUpload: File = null;
   @Output() public onUploadFinished = new EventEmitter();
   @Output() public numberOfClusterEmit = new EventEmitter();
 
@@ -22,8 +23,12 @@ export class UploadComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getPoints(files: any){
-    this.kmeansService.getPoints(files, this.numberOfCluster)
+  handleFileInput(files: FileList) {
+    this.fileToUpload = files.item(0);
+}
+
+  getPoints(){
+    this.kmeansService.getPoints(this.fileToUpload, this.numberOfCluster)
     .subscribe(event => {
       if(event.type === HttpEventType.UploadProgress){
         this.progress = Math.round((100 * event.loaded) / event.total);

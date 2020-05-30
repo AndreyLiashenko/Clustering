@@ -5,18 +5,18 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 
 @Component({
   selector: 'app-cleansing',
-  templateUrl: './cleansing.component.html',
-  styleUrls: ['./cleansing.component.css'],
+  templateUrl: './cleansing.component.html'
 })
+
+
 export class CleansingComponent implements OnInit {
 
-  fileToUpload: File = null;
-
+  public fileToUpload: File = null;
+  public query: CleanseParameters = new CleanseParameters(false, false, false);
 
   constructor(
     private http: HttpClient
   ) { 
-
   }
 
   ngOnInit(): void {
@@ -27,19 +27,21 @@ export class CleansingComponent implements OnInit {
 }
 
   submit(body: NgForm){
-    let headers = new HttpHeaders({
-      'Content-Type': 'multipart/form-data'
-    })
-    let options = {
-      headers: headers
-    }
+    const cleanseParams = 
+    `{'FilterData' : ${this.query.FilterData}, 
+    'ReplaceMissingValue': ${this.query.ReplaceMissingValue}, 
+    'NormalizeData': ${this.query.NormalizeData}}`
+
 
     const data = new FormData();
      data.append('file', this.fileToUpload, this.fileToUpload.name)
     this.http.post('http://localhost:5000/api/cleanse', data, 
-    {params: new HttpParams().set('cleanseParams',`{'FilterData' : false, 'ReplaceMissingValue': true, 'NormalizeData': true}`),
+    {params: new HttpParams().set('cleanseParams', cleanseParams),
     reportProgress: true, 
-    observe: 'events'
+    observe: 'events',
+    headers: new HttpHeaders({
+      "cache-control": "no-cache"
+    })
    }).subscribe(
       (data) => console.log(data)
   );
@@ -47,5 +49,14 @@ export class CleansingComponent implements OnInit {
 
 
 }
+}
+
+
+export class CleanseParameters {
+  constructor(
+  public FilterData: boolean,
+  public ReplaceMissingValue: boolean,
+  public NormalizeData: boolean)
+  { }
 }
 

@@ -1,0 +1,14 @@
+@import "./variables.scss";
+@import "./header.scss";
+@import "./cleansing.scss";
+@import "./forms.scss";
+
+html, body {
+    margin: 0;
+    background-color: $background;
+    font-family: 'Roboto Mono', monospace;
+}
+
+
+
+  
