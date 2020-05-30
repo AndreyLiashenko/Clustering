@@ -1,0 +1,34 @@
+<!-- <div>
+    {{MyText}}
+    <input type="checkbox" [checked]="FilterData.checked" value="FilterData" /> FilterData
+    <input type="file" />
+</div> -->
+
+<form #myForm="ngForm" novalidate>
+    <div class="form-group">
+        <label>Filter Data</label>
+        <input class="form-control" name="FilterData" type="checkbox" [(ngModel)]="FilterData" /> 
+    </div>
+    <div class="form-group">
+        <label>Replace Missing Value</label>
+        <input class="form-control" name="ReplaceMissingValue" type="checkbox" [(ngModel)]="ReplaceMissingValue" /> 
+    </div>
+    <div class="form-group">
+        <label>NormalizeData</label>
+        <input class="form-control" name="NormalizeData" type="checkbox" [(ngModel)]="NormalizeData" /> 
+    </div>
+    <!-- <div class="form-group">
+        <label>Filter Data</label>
+        <input class="form-control" name="FilterData" type="checkbox" [(ngModel)]="FilterData" /> 
+    </div> -->
+    <div class="form-group">
+        <button 
+                class="btn btn-default" (click)="submit(myForm)">Submit</button>
+    </div>
+</form>
+
+<!-- <form [formGroup]="checkoutForm">
+
+    <button class="button" type="submit">Purchase</button>
+  
+  </form> -->

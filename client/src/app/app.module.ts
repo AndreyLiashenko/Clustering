@@ -6,9 +6,15 @@ import { AppRoutingModule } from './app-routing.module';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http'
 import { AppComponent } from './app.component';
-
+import { CleansingComponent } from './cleansing/cleansing.component';
+import { Routes, RouterModule, Router } from '@angular/router';
 import * as PlotlyJS from 'plotly.js/dist/plotly.js';
 import { PlotlyModule } from 'angular-plotly.js';
+
+const appRoutes: Routes = [
+  { path: 'cleanse', component: CleansingComponent }
+];
+
 import { UploadComponent } from './upload/upload.component';
 import { FunctionPlotComponent } from './function-plot/function-plot.component';
 
@@ -18,7 +24,8 @@ PlotlyModule.plotlyjs = PlotlyJS;
   declarations: [
     AppComponent,
     UploadComponent,
-    FunctionPlotComponent
+    FunctionPlotComponent,
+    CleansingComponent
   ],
   imports: [
     BrowserModule,

@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.29926.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clustering", "Clustering\Clustering.csproj", "{D837A558-E1A9-41F6-B786-A9CA85800CEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCleansing", "DataCleansing\DataCleansing.csproj", "{DD14FA58-C015-49D7-BED6-E3E1C3C6E7FA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{D837A558-E1A9-41F6-B786-A9CA85800CEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D837A558-E1A9-41F6-B786-A9CA85800CEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D837A558-E1A9-41F6-B786-A9CA85800CEB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DD14FA58-C015-49D7-BED6-E3E1C3C6E7FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DD14FA58-C015-49D7-BED6-E3E1C3C6E7FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DD14FA58-C015-49D7-BED6-E3E1C3C6E7FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DD14FA58-C015-49D7-BED6-E3E1C3C6E7FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

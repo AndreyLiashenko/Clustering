@@ -131,6 +131,7 @@ namespace Clustering.Controllers
                 }
             }
 
+
             return Ok(result);
         }
 
@@ -150,7 +151,7 @@ namespace Clustering.Controllers
                 int counter = 0;
                 foreach (var point in cluster)
                 {
-                    if(counter == axisNumber)
+                    if (counter == axisNumber)
                     {
                         listOfCenter.Add(point);
                         break;
@@ -161,7 +162,7 @@ namespace Clustering.Controllers
 
             listOfCenter.Sort();
             double sigma = 0;
-            for(int i = 0; i < listOfCenter.Count; i++)
+            for (int i = 0; i < listOfCenter.Count; i++)
             {
                 var model = new GaussianModel();
                 if (listOfCenter[i] == listOfCenter.Last())
