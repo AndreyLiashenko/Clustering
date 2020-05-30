@@ -1,0 +1,16 @@
+{
+    "rules": [
+            {
+                "rule": "IF 'FR' low AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' high"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' middle AND 'TR' low THEN 'EN' high"
+            }
+        ]
+}

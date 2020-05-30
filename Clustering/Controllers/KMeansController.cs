@@ -169,6 +169,7 @@ namespace Clustering.Controllers
                     var lasItem = response.Last();
                     model.MathWaiting = listOfCenter[i];
                     model.Sigma = lasItem.Sigma;
+                    model.SimpleSigma = lasItem.SimpleSigma;
                     response.Add(model);
                     break;
                 }
@@ -178,10 +179,27 @@ namespace Clustering.Controllers
                 sigma = Math.Abs((listOfCenter[i] - listOfCenter[i + 1]) / listOfCenter.Count());
                 var sigmaTwoStep = 2 * (sigma * sigma);
                 model.Sigma = sigmaTwoStep;
+                model.SimpleSigma = sigma;
                 response.Add(model);
             }
 
             return Ok(response);
+        }
+
+        [HttpPost("getRules")]
+        public ActionResult Get([FromBody] ModelForRules model)
+        {
+            Dictionary<string, List<double>> lineSegments = new Dictionary<string, List<double>>();
+            foreach (var item in model.Gaussians)
+            {
+                var points = new List<double>();
+                var firstPoint = item.MathWaiting - (3 * item.SimpleSigma);
+                var secondPoint = item.MathWaiting + (3 * item.SimpleSigma);
+                points.Add(firstPoint);
+                points.Add(secondPoint);
+
+            }
+            return Ok();
         }
 
         //[HttpGet]

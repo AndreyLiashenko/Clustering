@@ -10,5 +10,7 @@ namespace Clustering.ResponseModel.GaussianResponse
         public double MathWaiting { get; set; }
 
         public double Sigma { get; set; }
+
+        public double SimpleSigma { get; set; }
     }
 }
