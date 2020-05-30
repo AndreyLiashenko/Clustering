@@ -30,9 +30,11 @@ namespace Clustering.Controllers
         [Route("api/cleanse")]
         [HttpPost]
         public List<SampleData> Post([FromForm(Name = "file")] IFormFile file, string cleanseParams)
+        //public List<SampleData> Post([FromBody] CleanseQuery query)
         {
             var request = this.Request;
             var test = _getScvRows.GetLines(file);
+            //var parameters = cleanseParams;
             var parameters = !string.IsNullOrEmpty(cleanseParams) ? JsonConvert.DeserializeObject<CleanseParameters>(cleanseParams) : new CleanseParameters();
 
             var lines = test.Transform().Select(x => new SampleData
@@ -104,6 +106,12 @@ namespace Clustering.Controllers
             public double Label;
             [VectorType(4)]
             public List<double> Features;
+        }
+
+        public class CleanseQuery
+        {
+            public IFormFile file { get; set; }
+            public CleanseParameters cleanseParams { get; set; }
         }
     }
 }

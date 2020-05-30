@@ -9,16 +9,13 @@
     {{todo.completed}}
 </div> -->
 
-<plotly-plot [data]="graph.data" [layout]="graph.layout"></plotly-plot>
-<hr>
-<app-upload (numberOfClusterEmit)="initialNumber($event)" (onUploadFinished)="updateClusters($event)"></app-upload>
-
-<div *ngIf="listOfCluster?.length > 0">
-  <select (change)="onChange($event)">
-    <option *ngFor="let item of listOfCluster" [value]="item.clusterId">Cluster {{item.clusterId}}</option>
-  </select>
-</div>
-
-<button *ngIf="isOneCluster" (click)="showAllClusters()">Show all clusters</button>
-
-<app-function-plot [centroids]="centroids"></app-function-plot>
+<h1>Angular Router App</h1>
+<!-- This nav gives you links to click, which tells the router which route to use (defined in the routes constant in  AppRoutingModule) -->
+<nav>
+  <ul>
+    <li><a routerLink="/cleanse" routerLinkActive="active">Data Cleansing</a></li>
+    <li><a routerLink="/cluster" routerLinkActive="active">Clustering</a></li>
+  </ul>
+</nav>
+<!-- The routed views render in the <router-outlet>-->
+<router-outlet></router-outlet>

@@ -17,6 +17,7 @@ const appRoutes: Routes = [
 
 import { UploadComponent } from './upload/upload.component';
 import { FunctionPlotComponent } from './function-plot/function-plot.component';
+import { ClusteringComponent } from './clustering/clustering.component';
 
 PlotlyModule.plotlyjs = PlotlyJS;
 
@@ -25,7 +26,8 @@ PlotlyModule.plotlyjs = PlotlyJS;
     AppComponent,
     UploadComponent,
     FunctionPlotComponent,
-    CleansingComponent
+    CleansingComponent,
+    ClusteringComponent
   ],
   imports: [
     BrowserModule,

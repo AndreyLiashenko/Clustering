@@ -1,6 +1,7 @@
 ﻿using Csv;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,7 +23,7 @@ namespace Clustering.Helpers
                 foreach (var point in line.Values)
                 {
                     if (!string.IsNullOrEmpty(point))
-                        doublePoints.Add(Convert.ToDouble(point));
+                        doublePoints.Add(double.Parse(point, CultureInfo.InvariantCulture));
                     else doublePoints.Add(float.NaN);
                 }
                 points.Add(doublePoints);
