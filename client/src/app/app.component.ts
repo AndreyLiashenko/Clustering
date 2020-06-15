@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import {DomSanitizer} from '@angular/platform-browser'
 
 import {KmeansModel} from './shared/kmeans/kmeans-model'
 import {Graph} from './shared/plotly-clustering-model/graph'
 import {Cluster} from './shared/kmeans/cluster';
 import {PlotlyClusteringService} from './plotly-clustering.services';
 import { Centroid } from './shared/kmeans/centroid';
+import {Algorithms} from './shared/algorithms-model'
+import * as jsonOfRules from './rules-example.json';
 
 
 @Component({
@@ -19,7 +22,8 @@ export class AppComponent implements OnInit {
     numberOfCluster: number;
     listOfCluster: Cluster[] = [];
     centroids : Centroid;
-  constructor(private plotlyClusteringService : PlotlyClusteringService ){
+
+  constructor(private plotlyClusteringService : PlotlyClusteringService, private sanitizer: DomSanitizer ){
       this.centroids = new Centroid();
   }
 

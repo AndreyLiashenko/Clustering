@@ -1,6 +1,12 @@
 <div class="row" style="margin-bottom:15px;">
     <div>
         <input type="text" placeholder="Number of clusters" [(ngModel)]="numberOfCluster">
+        
+        <select  (change)="onChangeAlgorithm($event)" [ngModel]="enumsOfAlgorithms">
+            <option value="{{ algorithms.KMeans }}">KMeans</option>
+            <option value="{{ algorithms.FCM }}">FCM</option>
+        </select>
+
         <button (click)="emitNumberOfCluster()">Initialize</button>
     </div>
 

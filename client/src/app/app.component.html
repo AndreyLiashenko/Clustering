@@ -11,6 +11,7 @@
 
 <plotly-plot [data]="graph.data" [layout]="graph.layout"></plotly-plot>
 <hr>
+
 <app-upload (numberOfClusterEmit)="initialNumber($event)" (onUploadFinished)="updateClusters($event)"></app-upload>
 
 <div *ngIf="listOfCluster?.length > 0">

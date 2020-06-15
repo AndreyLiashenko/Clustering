@@ -1,8 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
+import {DomSanitizer} from '@angular/platform-browser'
 import { HttpEventType } from '@angular/common/http';
 import {KmeansService} from '../kmeans.services';
 import {GaussResponse} from '../shared/gauss/gauss-response';
 import {PlotFunctionModel} from '../shared/plot-function-model';
+import * as jsonOfRules from '../rules-example.json';
 
 import * as functionPlot from '../../../node_modules/function-plot/dist/function-plot.js';
 import { Centroid } from '../shared/kmeans/centroid.js';
@@ -22,8 +24,10 @@ export class FunctionPlotComponent implements OnInit {
   y1: number = -0.1;
   y2: number = 1;
   axis: number;
+  downloadJsonHref: any;
+  downloadLink: boolean = false;
 
-  constructor(private kmeansService: KmeansService) { 
+  constructor(private kmeansService: KmeansService, private sanitizer: DomSanitizer) { 
     this.centroids = new Centroid();
   }
 
@@ -97,4 +101,12 @@ export class FunctionPlotComponent implements OnInit {
     // this.y1 = 0;
     // this.y2 = 0;
    }
+
+   generateDownloadJsonUri() : any {
+    var theJSON = JSON.stringify(jsonOfRules);
+    console.log("DOWNLOAD");
+    var uri = this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8," + encodeURIComponent(theJSON));
+    this.downloadJsonHref = uri;
+    this.downloadLink = true;
+  }
 }

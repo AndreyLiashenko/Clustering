@@ -4,6 +4,8 @@ import { Observable, from } from 'rxjs';
 import {KmeansModel} from './shared/kmeans/kmeans-model'
 import { Centroid } from './shared/kmeans/centroid';
 import {GaussResponse} from './shared/gauss/gauss-response';
+import {Algorithms} from './shared/algorithms-model';
+
 
 
 
@@ -13,8 +15,14 @@ export class KmeansService{
     apiUrl: string;
 	constructor(private http: HttpClient) {}
 
-    getPoints( files: any, numberOfClusters: number) : Observable<HttpEvent<KmeansModel>>{
-
+    getPoints( files: any, numberOfClusters: number, typeOfAlgorithm: Algorithms) : Observable<HttpEvent<KmeansModel>>{
+        
+        if(typeOfAlgorithm.valueOf() == 0){
+            console.log('typeOfAlgorithm if', typeOfAlgorithm);
+        }
+        else{
+            console.log('typeOfAlgorithm else', typeOfAlgorithm);
+        }
         let fileToUpload = <File>files[0];
         const formData = new FormData();
 		formData.append('file', fileToUpload, fileToUpload.name);
