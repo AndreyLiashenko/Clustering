@@ -11,6 +11,210 @@
             },
             {
                 "rule": "IF 'FR' middle AND 'TR' low THEN 'EN' high"
+            },
+            {
+                "rule": "IF 'FR' low AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' middle AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' middle"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' middle THEN 'EN' middle"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' middle THEN 'EN' high"
+            },
+            {
+                "rule": "IF 'FR' middle AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' low AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' low AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' low AND 'TR' middle THEN 'EN' middle"
+            },
+            {
+                "rule": "IF 'FR' middle AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' low AND 'TR' middle THEN 'EN' middle"
+            },
+            {
+                "rule": "IF 'FR' middle AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' low AND 'TR' middle THEN 'EN' middle"
+            },
+            {
+                "rule": "IF 'FR' middle AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' low AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' high THEN 'EN' high"
+            },
+            {
+                "rule": "IF 'FR' middle AND 'TR' middle THEN 'EN' middle"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' low AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' high THEN 'EN' high"
+            },
+            {
+                "rule": "IF 'FR' middle AND 'TR' middle THEN 'EN' middle"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' middle AND 'TR' high THEN 'EN' middle"
+            },
+            {
+                "rule": "IF 'FR' low AND 'TR' middle THEN 'EN' middle"
+            },
+            {
+                "rule": "IF 'FR' middle AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' middle AND 'TR' high THEN 'EN' middle"
+            },
+            {
+                "rule": "IF 'FR' low AND 'TR' middle THEN 'EN' middle"
+            },
+            {
+                "rule": "IF 'FR' middle AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' low AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' high THEN 'EN' high"
+            },
+            {
+                "rule": "IF 'FR' middle AND 'TR' middle THEN 'EN' middle"
+            },
+            {
+                "rule": "IF 'FR' high AND 'TR' middle THEN 'EN' high"
+            },
+            {
+                "rule": "IF 'FR' middle AND 'TR' low THEN 'EN' low"
+            },
+            {
+                "rule": "IF 'FR' low AND 'TR' low THEN 'EN' low"
             }
         ]
 }

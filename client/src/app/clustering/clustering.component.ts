@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import {DomSanitizer} from '@angular/platform-browser'
 import {PlotlyClusteringService} from '../plotly-clustering.services';
 import {KmeansModel} from '../shared/kmeans/kmeans-model'
 import {Graph} from '../shared/plotly-clustering-model/graph'
@@ -7,6 +8,8 @@ import {PlotFunctionModel} from '../shared/plot-function-model';
 import {KmeansService} from '../kmeans.services';
 import {GaussResponse} from '../shared/gauss/gauss-response';
 import * as functionPlot from '../../../node_modules/function-plot/dist/function-plot.js';
+import {Algorithms} from '../shared/algorithms-model';
+import * as jsonOfRules from '../rules-example.json';
 
 import { Centroid } from '../shared/kmeans/centroid';
 import { HttpEventType } from '@angular/common/http';
@@ -25,6 +28,8 @@ export class ClusteringComponent implements OnInit {
   y2: number = 1;
   axis: number;
   graph: Graph;
+  downloadJsonHref: any;
+  downloadLink: boolean = false;
 
 
     isOneCluster: boolean = false;
@@ -34,7 +39,8 @@ export class ClusteringComponent implements OnInit {
 
   constructor(
     private plotlyClusteringService : PlotlyClusteringService,
-    private kmeansService: KmeansService
+    private kmeansService: KmeansService,
+    private sanitizer: DomSanitizer
   ) { 
     this.centroids = new Centroid();
   }
@@ -154,5 +160,12 @@ public onChange(event) {
    // this.y2 = 0;
   }
 
+  generateDownloadJsonUri() : any {
+    var theJSON = JSON.stringify(jsonOfRules);
+    console.log("DOWNLOAD");
+    var uri = this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8," + encodeURIComponent(theJSON));
+    this.downloadJsonHref = uri;
+    this.downloadLink = true;
 
+  }
 }

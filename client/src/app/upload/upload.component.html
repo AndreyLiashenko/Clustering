@@ -2,7 +2,15 @@
     <div>
         <input type="text" placeholder="Number of clusters" [(ngModel)]="numberOfCluster" (change)="emitNumberOfCluster()">
         <!-- <button class="btn-default" >Initialize</button> -->
+        
+        <select  (change)="onChangeAlgorithm($event)" [ngModel]="enumsOfAlgorithms" >
+            <option value="{{ algorithms.KMeans }}">KMeans</option>
+            <option value="{{ algorithms.FCM }}">FCM</option>
+        </select>
     </div>
+
+            
+
 
         <input type="file" id="file" class="inputfile" (change)="handleFileInput($event.target.files)">
         <label for="file" class="form-group"><i class="fas fa-file-upload"></i> Upload File</label>

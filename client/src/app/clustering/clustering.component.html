@@ -18,7 +18,7 @@
   
   <div >
     <input type="text" placeholder="Enter the axis" [(ngModel)]="axis">
-    <button class="btn-default" (click)="buildGraph()">Build graph</button>
+    <button class="btn-default" (click)="buildGraph()" (click)="generateDownloadJsonUri()">Build graph</button>
   </div>
   
   <div *ngIf="data.length > 0">
@@ -29,4 +29,8 @@
       <button class="btn-default" (click)="changeScope()">Change Scope</button>
     </div>
 
+    
+    <div *ngIf="downloadLink==true">
+      <a class="btn-default" [href]="downloadJsonHref" download="download.json">Download Fuzzy Rules</a>
+    </div>      
 </div>
