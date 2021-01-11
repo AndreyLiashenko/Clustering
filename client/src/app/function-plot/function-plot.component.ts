@@ -6,8 +6,6 @@ import {GaussResponse} from '../shared/gauss/gauss-response';
 import {PlotFunctionModel} from '../shared/plot-function-model';
 import * as jsonOfRules from '../rules-example.json';
 
-import * as functionPlot from '../../../node_modules/function-plot/dist/function-plot.js';
-import { Centroid } from '../shared/kmeans/centroid.js';
 
 @Component({
   selector: 'app-function-plot',
@@ -64,38 +62,10 @@ export class FunctionPlotComponent implements OnInit {
     })
    }
 
-    mapData(response: GaussResponse[]) : PlotFunctionModel[]{
+//   ngOnInit(): void {
+//   }
 
-        var arr : PlotFunctionModel[] = [];
-        for(var item of response){
-            var model = new PlotFunctionModel();
-            console.log('sigma',item.sigma);
-            model.fn = `exp(-((${item.mathWaiting}-x)^2)/${item.sigma})`;
-            model.derivative = {
-              fn: "2 * x",
-              updateOnMouseMove: true
-            }
-            arr.push(model);
-        }
-        return arr;
-   }
-
-   changeScope(){
-    const root = document.querySelector("#root");
-    console.log('y1', this.y1);
-    console.log('y2', this.y2);
-    console.log('x1', this.x1);
-    console.log('x2', this.x2);
-    functionPlot({
-      target: root,
-      yAxis: { domain: [this.y1, this.y2] },
-      xAxis: { domain: [this.x1, this.x2] },
-      tip: {
-        renderer: function() {}
-      },
-      grid: true,
-      data: this.data
-    })
+   
 
     // this.x1 = 0;
     // this.x2 = 0;

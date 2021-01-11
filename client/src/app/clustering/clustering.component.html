@@ -1,0 +1,36 @@
+<plotly-plot [data]="graph.data" [layout]="graph.layout"></plotly-plot>
+<!-- <hr> -->
+<app-upload (numberOfClusterEmit)="initialNumber($event)" (onUploadFinished)="updateClusters($event)"></app-upload>
+
+<div class="form" *ngIf="listOfCluster?.length > 0">
+  <select class="custom-select" (change)="onChange($event)">
+    <option *ngFor="let item of listOfCluster" [value]="item.clusterId">Cluster {{item.clusterId}}</option>
+  </select>
+</div>
+
+<button class="btn-default" *ngIf="isOneCluster" (click)="showAllClusters()" style="margin: 0 50px;">Show all clusters</button>
+<!-- 
+<app-function-plot [centroids]="centroids"></app-function-plot> -->
+
+<div class="form">
+  
+  <div id="root"></div>
+  
+  <div >
+    <input type="text" placeholder="Enter the axis" [(ngModel)]="axis">
+    <button class="btn-default" (click)="buildGraph()" (click)="generateDownloadJsonUri()">Build graph</button>
+  </div>
+  
+  <div *ngIf="data.length > 0">
+    <input type="text" placeholder="Start X" [(ngModel)]="x1">
+    <input type="text" placeholder="End X" [(ngModel)]="x2">
+    <!-- <input type="text" placeholder="Start Y" [(ngModel)]="y1">
+      <input type="text" placeholder="End Y" [(ngModel)]="y2"> -->
+      <button class="btn-default" (click)="changeScope()">Change Scope</button>
+    </div>
+
+    
+    <div *ngIf="downloadLink==true">
+      <a class="btn-default" [href]="downloadJsonHref" download="download.json">Download Fuzzy Rules</a>
+    </div>      
+</div>

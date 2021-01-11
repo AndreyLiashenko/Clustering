@@ -1,0 +1,44 @@
+<!-- <div>
+    {{MyText}}
+    <input type="checkbox" [checked]="FilterData.checked" value="FilterData" /> FilterData
+    <input type="file" />
+</div> -->
+
+<form #myForm="ngForm" class="form" novalidate>
+    <input type="file" id="file" class="inputfile" (change)="handleFileInput($event.target.files)">
+    <label for="file" class="form-group"><i class="fas fa-file-upload"></i> Choose File</label>
+    <span>{{fileToUpload ? fileToUpload.name : ""}}</span>
+
+    <label class="container form-group">Auto Cleansing
+        <input name="AutoCleansing" type="checkbox" [(ngModel)]="query.AutoCleansing"  [checked]="query.AutoCleansing"  /> 
+        <span class="checkmark"></span>
+    </label>
+    <div *ngIf="!query.AutoCleansing">
+        <label class="container form-group">Filter Data
+            <input name="FilterData" type="checkbox" [(ngModel)]="query.FilterData"  [checked]="query.FilterData" /> 
+            <span class="checkmark"></span>
+        </label>
+        <label class="container form-group">Replace Missing Value
+            <input name="ReplaceMissingValue" type="checkbox"  [(ngModel)]="query.ReplaceMissingValue" /> 
+            <span class="checkmark"></span>
+        </label>
+        <label class="container form-group">Normalize Data
+            <input name="NormalizeData" type="checkbox"  [(ngModel)]="query.NormalizeData" /> 
+            <span class="checkmark"></span>
+        </label>
+        <label class="container form-group">Remove Dublicates
+            <input name="RemoveDublicates" type="checkbox"  [(ngModel)]="query.RemoveDublicates" /> 
+            <span class="checkmark"></span>
+        </label>
+    </div>
+    
+    <div class="form-group">
+        <button class="btn-default" (click)="submit(myForm)">Submit</button>
+    </div>
+</form>
+
+<!-- <form [formGroup]="checkoutForm">
+
+    <button class="button" type="submit">Purchase</button>
+  
+  </form> -->

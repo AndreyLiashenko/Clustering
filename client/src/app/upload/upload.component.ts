@@ -24,7 +24,13 @@ export class UploadComponent implements OnInit {
   constructor(private kmeansService: KmeansService) { }
 
   ngOnInit(): void {
+    this.enumsOfAlgorithms = Algorithms.KMeans;
+    this.onChangeAlgorithmProperty = this.enumsOfAlgorithms;
   }
+
+  handleFileInput(files: FileList) {
+    this.fileToUpload = files.item(0);
+}
 
   getPoints(files: any){
     this.kmeansService.getPoints(files, this.numberOfCluster, this.onChangeAlgorithmProperty)
