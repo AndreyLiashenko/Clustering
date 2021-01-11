@@ -25,6 +25,11 @@ namespace Clustering.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Map data for building fuzzy rules "3"
+        /// </summary>
+        /// <param name="file">File with data for clustering</param>
+        /// <returns>list of specific data</returns>
         [HttpPost("mapData")]
         public ActionResult<List<List<KeyValueCsv>>> MapData(IFormFile file)
         {

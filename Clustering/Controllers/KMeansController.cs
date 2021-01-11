@@ -149,7 +149,49 @@ namespace Clustering.Controllers
         }
 
         /// <summary>
-        /// Method, which get parameters for Gaussin function.
+        /// Get centroids after k-means clustering "1"
+        /// </summary>
+        /// <param name="file">File from which the data is read</param>
+        /// <param name="numberOfClusters">Number of clusters</param>
+        /// <returns>Centroids</returns>
+        [HttpPost("getCentroids")]
+        public ActionResult<KMeansResponse> GetCentroids(IFormFile file, [FromQuery] int numberOfClusters = 3)
+        {
+            var lines = _getScvRows.GetLines(file);
+            var points = lines.Transform();
+            Console.WriteLine($"NUMBER OF CLUSTER -> {numberOfClusters}");
+
+            var result = new KMeansResponseFrontModel();
+            var centroid = new Centroids();
+            List<List<double>> clusterCenters = AlgorithmsUtils.MakeInitialSeeds(points, numberOfClusters);
+
+            bool stop = false;
+            Dictionary<List<double>, List<double>> clusters = null;
+
+            while (!stop)
+            {
+                _logger.LogInformation($"Iteration = {iteration}");
+                iteration++;
+
+                clusters = KMeansAlgorithm.MakeClusters(points, clusterCenters);
+                List<List<double>> oldClusterCenters = clusterCenters;
+                //recalculete center of clusters
+                clusterCenters = KMeansAlgorithm.RecalculateCoordinateOfClusterCenters(clusters, clusterCenters);
+
+                if (ListUtils.IsListEqualsToAnother(clusterCenters, oldClusterCenters))
+                {
+                    stop = true;
+                    result.Centroids = new Centroids();
+                    result.Centroids.Centroid = clusterCenters;
+                }
+            }
+
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Method, which get parameters for Gaussin function. "2"
         /// </summary>
         /// <param name="centroids">Object, which have list of cluster.</param>
         /// <param name="axisNumber">Number beetween 0 and 2.</param>

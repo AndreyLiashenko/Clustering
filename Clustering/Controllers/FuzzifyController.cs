@@ -27,6 +27,11 @@ namespace Clustering.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Get fuzzify rules "4"
+        /// </summary>
+        /// <param name="model">Input model</param>
+        /// <returns>Rules</returns>
         [HttpPost("getRules")]
         public ActionResult<double> Get([FromBody] VariableWithData model)
         {
