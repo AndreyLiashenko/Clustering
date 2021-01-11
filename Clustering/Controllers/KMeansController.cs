@@ -19,6 +19,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Clustering.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class KMeansController : ControllerBase
@@ -33,8 +34,14 @@ namespace Clustering.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// K-means clustering
+        /// </summary>
+        /// <param name="file">File from which the data is read</param>
+        /// <param name="numberOfClusters">Number of clusters</param>
+        /// <returns>Centroids and the point to which cluster it belongs</returns>
         [HttpPost]
-        public ActionResult<KMeansResponse> Post([FromForm(Name = "file")] IFormFile file, [FromQuery]int numberOfClusters = 3)
+        public ActionResult<KMeansResponse> Post(/*[FromForm(Name = "file")]*/ IFormFile file, [FromQuery]int numberOfClusters = 3)
         {
             var lines = _getScvRows.GetLines(file);
             var points = lines.Transform();
@@ -82,8 +89,14 @@ namespace Clustering.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Clustering for front-end. draws a three-dimensional graph. ONLY 3 PROPERTY in csv file.
+        /// </summary>
+        /// <param name="file">File from which the data is read</param>
+        /// <param name="numberOfClusters">Number of clusters</param>
+        /// <returns>Centroids and the point to which cluster it belongs</returns>
         [HttpPost("frontModel")]
-        public ActionResult<KMeansResponse> PostModel([FromForm(Name = "file")] IFormFile file, [FromQuery]int numberOfClusters = 3)
+        public ActionResult<KMeansResponse> PostModel(/*[FromForm(Name = "file")]*/ IFormFile file, [FromQuery]int numberOfClusters = 3)
         {
             var lines = _getScvRows.GetLines(file);
             var points = lines.Transform();
@@ -139,7 +152,7 @@ namespace Clustering.Controllers
         /// </summary>
         /// <param name="centroids">Object, which have list of cluster.</param>
         /// <param name="axisNumber">Number beetween 0 and 2.</param>
-        /// <returns></returns>
+        /// <returns>Math waiting and sigma</returns>
         [HttpPost("getGaussParam")]
         public ActionResult<List<GaussianModel>> Get([FromBody] Centroids centroids, [FromQuery] int axisNumber = 0)
         {
@@ -186,25 +199,34 @@ namespace Clustering.Controllers
             return Ok(response);
         }
 
-        [HttpPost("getRules")]
-        public ActionResult Get([FromBody] ModelForRules model)
-        {
-            Dictionary<string, List<double>> lineSegments = new Dictionary<string, List<double>>();
-            foreach (var item in model.Gaussians)
-            {
-                var points = new List<double>();
-                var firstPoint = item.MathWaiting - (3 * item.SimpleSigma);
-                var secondPoint = item.MathWaiting + (3 * item.SimpleSigma);
-                points.Add(firstPoint);
-                points.Add(secondPoint);
+        //[HttpPost("getRules")]
+        //public ActionResult Get([FromBody] ModelForRules model)
+        //{
+        //    Dictionary<string, List<double>> lineSegments = new Dictionary<string, List<double>>();
+        //    foreach (var item in model.Gaussians)
+        //    {
+        //        var points = new List<double>();
+        //        var firstPoint = item.MathWaiting - (3 * item.SimpleSigma);
+        //        var secondPoint = item.MathWaiting + (3 * item.SimpleSigma);
+        //        points.Add(firstPoint);
+        //        points.Add(secondPoint);
 
-            }
-            return Ok();
-        }
+        //    }
+        //    return Ok();
+        //}
 
         //[HttpGet]
         //public ActionResult<double> Get()
         //{
+        //    var testVariable = new LinguisticVariable("Test");
+        //    var low1 = testVariable.MembershipFunctions.AddGaussian("low", 1984, 30.8867).Fuzzify(2400);
+        //    var middle1 = testVariable.MembershipFunctions.AddGaussian("middle1", 2076.8109, 12.7242).Fuzzify(2400);
+        //    var high1 = testVariable.MembershipFunctions.AddGaussian("high1", 2114.8327, 12.7242).Fuzzify(2400);
+
+        //    //var power1 = new LinguisticVariable("Power");
+        //    //var low1 = power1.MembershipFunctions.AddTriangle("Low", 0, 25, 50).Fuzzify(27);
+        //    //var high1 = power1.MembershipFunctions.AddTriangle("High", 25, 50, 75).Fuzzify(27);
+
         //    var water = new LinguisticVariable("Water");
         //    var cold = water.MembershipFunctions.AddTrapezoid("Cold", 0, 0, 20, 40);
         //    var warm = water.MembershipFunctions.AddTriangle("Warm", 30, 50, 70);

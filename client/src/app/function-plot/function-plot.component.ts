@@ -40,6 +40,7 @@ export class FunctionPlotComponent implements OnInit {
        if(event.type === HttpEventType.Response){
         this.gaussResponse = event.body;
         console.log('response', this.gaussResponse);
+        console.log('centroids', this.centroids);
         this.data = this.mapData(this.gaussResponse);
         console.log('data', this.data);
         this.execPlotFunction(this.data);

@@ -10,5 +10,7 @@ namespace Clustering.Services.CsvRead
     public interface IGetScvRows
     {
         List<ICsvLine> GetLines(IFormFile file);
+
+        List<string> GetHeaders(IFormFile file);
     }
 }

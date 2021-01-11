@@ -26,7 +26,7 @@ export class KmeansService{
         let fileToUpload = <File>files[0];
         const formData = new FormData();
 		formData.append('file', fileToUpload, fileToUpload.name);
-        return this.http.post<KmeansModel>('http://localhost:3921/api/kmeans/frontModel',formData, 
+        return this.http.post<KmeansModel>('http://localhost:3921/api/kmeans',formData, 
         {params: new HttpParams().set('numberOfClusters',`${numberOfClusters}`),
          reportProgress: true, 
          observe: 'events'
