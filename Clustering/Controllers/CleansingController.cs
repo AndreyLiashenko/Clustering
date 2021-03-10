@@ -1,7 +1,7 @@
-﻿using Clustering.Helpers;
+﻿using Clustering.Common.Extensions;
 using Clustering.Models;
-using Clustering.Models.DataModels;
-using Clustering.Services.CsvRead;
+using Clustering.Models.Data;
+using Clustering.Services.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.ML;

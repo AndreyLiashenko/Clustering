@@ -29,4 +29,12 @@
     <PackageReference Include="System.Runtime" Version="4.3.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Clustering.Algorithms\Clustering.Algorithms.csproj" />
+    <ProjectReference Include="..\Clustering.Common\Clustering.Common.csproj" />
+    <ProjectReference Include="..\Clustering.Model\Clustering.Model.csproj" />
+    <ProjectReference Include="..\Clustering.Services.Contracts\Clustering.Services.Contracts.csproj" />
+    <ProjectReference Include="..\Clustering.Services\Clustering.Services.csproj" />
+  </ItemGroup>
+
 </Project>

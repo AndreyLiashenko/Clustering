@@ -1,37 +1,19 @@
 ﻿using Clustering.Common.Helpers;
 using Clustering.Models.Request;
+using Clustering.Services.Contracts;
 using FLS;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace Clustering.Controllers
+namespace Clustering.Services
 {
-    [Produces("application/json")]
-    [Route("api/[controller]")]
-    [ApiController]
-    public class FuzzifyController : ControllerBase
+    public class FuzzifyService : IFuzzifyService
     {
-        private readonly ILogger _logger;
-        public FuzzifyController(ILogger<FuzzifyController> logger)
+        public List<Dictionary<string, string>> Get(VariableWithData model)
         {
-            _logger = logger;
-        }
-
-        /// <summary>
-        /// Get fuzzify rules "4"
-        /// </summary>
-        /// <param name="model">Input model</param>
-        /// <returns>Rules</returns>
-        [HttpPost("getRules")]
-        public ActionResult<double> Get([FromBody] VariableWithData model)
-        {
-            var result = new List<dynamic>();
+            var result = new List<Dictionary<string, string>>();
             var variables = new List<LinguisticVariable>();
 
             //map linguistic variables with their terms
@@ -50,7 +32,7 @@ namespace Clustering.Controllers
             foreach (var line in model.Data)
             {
                 // var rule = new DynObject();
-                var properties = new Dictionary<string, object>();
+                var properties = new Dictionary<string, string>();
                 // point in line
                 foreach (var point in line)
                 {
@@ -71,10 +53,10 @@ namespace Clustering.Controllers
                     properties.Add(variable.Name, listOfFuzzifyPoints.GetMaxTerm());
                 }
 
-                result.Add(new DynObject(properties));
+                result.Add(properties);
             }
 
-            return Ok(result);
+            return result;
         }
     }
 }
