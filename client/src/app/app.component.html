@@ -1,8 +1,25 @@
-<h1 class="header">DATA CLUSTERING</h1>
-<nav>
-  <ul>
-    <li><a routerLink="/cleanse" routerLinkActive="active">Data Cleansing</a></li>
-    <li><a routerLink="/cluster" routerLinkActive="active">Clustering</a></li>
-  </ul>
-</nav>
-<router-outlet></router-outlet>
+<!-- <div>
+  <input type="text" placeholder="Название" [(ngModel)]="title">
+  <button (click)="addTodo()">Добавить</button>
+  <button (click)="fetchTodos()">Загрузить</button>
+</div>
+
+<div *ngFor="let todo of todos">
+    {{todo.title}}
+    {{todo.completed}}
+</div> -->
+
+<plotly-plot [data]="graph.data" [layout]="graph.layout"></plotly-plot>
+<hr>
+
+<app-upload (numberOfClusterEmit)="initialNumber($event)" (onUploadFinished)="updateClusters($event)"></app-upload>
+
+<div *ngIf="listOfCluster?.length > 0">
+  <select (change)="onChange($event)">
+    <option *ngFor="let item of listOfCluster" [value]="item.clusterId">Cluster {{item.clusterId}}</option>
+  </select>
+</div>
+
+<button *ngIf="isOneCluster" (click)="showAllClusters()">Show all clusters</button>
+
+<app-function-plot [centroids]="centroids"></app-function-plot>

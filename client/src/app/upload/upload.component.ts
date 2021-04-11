@@ -17,7 +17,6 @@ export class UploadComponent implements OnInit {
   public onChangeAlgorithmProperty: Algorithms;
   @Input() enumsOfAlgorithms: Algorithms;
   algorithms = Algorithms;
-  public fileToUpload: File = null;
   @Output() public onUploadFinished = new EventEmitter();
   @Output() public numberOfClusterEmit = new EventEmitter();
 
@@ -33,8 +32,8 @@ export class UploadComponent implements OnInit {
     this.fileToUpload = files.item(0);
 }
 
-  getPoints(){
-    this.kmeansService.getPoints(this.fileToUpload, this.numberOfCluster, this.onChangeAlgorithmProperty)
+  getPoints(files: any){
+    this.kmeansService.getPoints(files, this.numberOfCluster, this.onChangeAlgorithmProperty)
     .subscribe(event => {
       if(event.type === HttpEventType.UploadProgress){
         this.progress = Math.round((100 * event.loaded) / event.total);

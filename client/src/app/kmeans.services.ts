@@ -7,30 +7,30 @@ import { GaussResponse } from './shared/gauss/gauss-response';
 import { Algorithms } from './shared/algorithms-model';
 
 
-@Injectable({ providedIn: 'root' })
-export class KmeansService {
+
+
+@Injectable({providedIn: 'root'})
+export class KmeansService{
 
     apiUrl: string;
     constructor(private http: HttpClient) { }
 
-    getPoints(fileToUpload: any, numberOfClusters: number, typeOfAlgorithm: Algorithms): Observable<HttpEvent<KmeansModel>> {
-
-
-        if (typeOfAlgorithm.valueOf() == 0) {
+    getPoints( files: any, numberOfClusters: number, typeOfAlgorithm: Algorithms) : Observable<HttpEvent<KmeansModel>>{
+        
+        if(typeOfAlgorithm.valueOf() == 0){
             console.log('typeOfAlgorithm if', typeOfAlgorithm);
         }
         else {
             console.log('typeOfAlgorithm else', typeOfAlgorithm);
         }
-
+        let fileToUpload = <File>files[0];
         const formData = new FormData();
-        formData.append('file', fileToUpload, fileToUpload.name);
-        return this.http.post<KmeansModel>('http://localhost:3921/api/kmeans/frontModel', formData,
-            {
-                params: new HttpParams().set('numberOfClusters', `${numberOfClusters}`),
-                reportProgress: true,
-                observe: 'events'
-            });
+		formData.append('file', fileToUpload, fileToUpload.name);
+        return this.http.post<KmeansModel>('http://localhost:3921/api/kmeans',formData, 
+        {params: new HttpParams().set('numberOfClusters',`${numberOfClusters}`),
+         reportProgress: true, 
+         observe: 'events'
+        });
     }
 
     getGaussianParam(centroids: Centroid, axisNumber: number): Observable<HttpEvent<GaussResponse[]>> {

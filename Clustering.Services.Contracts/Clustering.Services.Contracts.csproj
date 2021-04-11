@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Csv" Version="1.0.53" />
+	  <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Clustering.Model\Clustering.Model.csproj" />
+	</ItemGroup>
+
+</Project>
