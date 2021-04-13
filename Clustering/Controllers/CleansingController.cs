@@ -1,63 +1,107 @@
 ﻿using Clustering.Common.Extensions;
+using Clustering.Helpers;
 using Clustering.Models;
-using Clustering.Models.Data;
 using Clustering.Services.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.ML;
 using Microsoft.ML.Data;
-using Microsoft.ML.Runtime;
 using Microsoft.ML.Transforms;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 
 namespace Clustering.Controllers
 {
     public class CleansingController : ControllerBase
     {
         private readonly IGetScvRows _getScvRows;
+        private readonly IHttpClientFactory _clientFactory;
         private readonly MLContext _mlContext;
         private IDataView _data;
 
-        public CleansingController(IGetScvRows getScvRows)
+        public CleansingController(IGetScvRows getScvRows, IHttpClientFactory clientFactory)
         {
             _getScvRows = getScvRows;
             _mlContext = new MLContext();
+            _clientFactory = clientFactory;
         }
 
         [Route("api/cleanse")]
         [HttpPost]
-        public List<SampleData> Post([FromForm(Name = "file")] IFormFile file, string cleanseParams)
+        public string Post([FromForm(Name = "file")] IFormFile file, string cleanseParams)
         {
             var request = this.Request;
             var test = _getScvRows.GetLines(file);
+            var columnNames = test[0];
             var parameters = !string.IsNullOrEmpty(cleanseParams) ? JsonConvert.DeserializeObject<CleanseParameters>(cleanseParams) : new CleanseParameters();
 
-            var lines = test.Transform().Select(x => new SampleData
+            var lines = test.TransformRows()
+                .Select((x, i) => new DataVector { Label = i, Features = x.ToArray() })
+                .ToList();
+
+            var schemaDef = SchemaDefinition.Create(typeof(DataVector), SchemaDefinition.Direction.Both);
+            using (var stream = file.OpenReadStream())
             {
-                Id = x[0],
-                ProcessFrequency = x[1],
-                ThreadsNumber = x[2],
-                ConsumpredEnergy = x[3]
-            });
-            //    .Select((x,i) => new DataVector { Label = i, Features = x });
-            //var schemaDef = SchemaDefinition.Create(typeof(DataVector));
-            //schemaDef["Features"].ColumnType = VectorConverter.
-            //_data = _mlContext.Data.LoadFromEnumerable<DataVector>(lines);
+                //var result = DataSetParserService.GetDataTabletFromCSVFile(stream, true);
+                //DataSet ds = new DataSet();
+                //ds.Tables.Add(result);
+                //DataViewManager dvManager = new DataViewManager(ds);
 
+                int numberOfFeatures = lines.FirstOrDefault().Features.Count();
 
-            _data = _mlContext.Data.LoadFromEnumerable(lines);
-            var headers = _data.Schema;
+                schemaDef["Features"].ColumnType = new VectorDataViewType(NumberDataViewType.Double, numberOfFeatures);
+                _data = _mlContext.Data.LoadFromEnumerable<DataVector>(lines, schemaDef);
+            }
 
             //https://docs.microsoft.com/en-us/dotnet/machine-learning/how-to-guides/prepare-data-ml-net
             CleanData(parameters);
 
+            using (var stream = file.OpenReadStream())
+            {
+                var actionUrl = "https://clustering-fuzzy.herokuapp.com/get_dummies/";
+                HttpContent fileStreamContent = new StreamContent(stream);
+                using (var client = new HttpClient())
+                using (var formData = new MultipartFormDataContent())
+                {
+                    formData.Add(fileStreamContent, "csv", "csv");
+                    var response = client.PostAsync(actionUrl, formData).Result;
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return null;
+                    }
+                    var res = response.Content.ReadAsStreamAsync().Result;
+                    file = ReturnFormFile(res);
+                }
+            }
+
             var enumerable = _mlContext.Data
-                .CreateEnumerable<SampleData>(_data, reuseRowObject: false)
+                .CreateEnumerable<DataVector>(_data, reuseRowObject: false, schemaDefinition: schemaDef)
                 .ToList();
-            return enumerable;
+
+
+            return enumerable.ToCsv();
+        }
+
+        private IFormFile ReturnFormFile(Stream result)
+        {
+            var ms = new MemoryStream();
+            try
+            {
+                result.CopyTo(ms);
+                return new FormFile(ms, 0, ms.Length, "name", "csv");
+            }
+            catch (Exception e)
+            {
+                ms.Dispose();
+                throw;
+            }
+            finally
+            {
+                ms.Dispose();
+            }
         }
 
         private void CleanData(CleanseParameters parameters)
@@ -77,56 +121,48 @@ namespace Clustering.Controllers
                 RemoveDublicates();
         }
 
-        private void InitializeParams()
-        {
-            
-        }
-
         private void NormalizeData()
         {
-            var minMaxEstimator = _mlContext.Transforms.NormalizeMinMax("ProcessFrequency");
+            var minMaxEstimator = _mlContext.Transforms.NormalizeMinMax("Features");
             _data = minMaxEstimator.Fit(_data).Transform(_data);
 
-            minMaxEstimator = _mlContext.Transforms.NormalizeMinMax("ThreadsNumber");
-            _data = minMaxEstimator.Fit(_data).Transform(_data);
+            //minMaxEstimator = _mlContext.Transforms.NormalizeMinMax("ThreadsNumber");
+            //_data = minMaxEstimator.Fit(_data).Transform(_data);
 
-            minMaxEstimator = _mlContext.Transforms.NormalizeMinMax("ConsumpredEnergy");
-            _data = minMaxEstimator.Fit(_data).Transform(_data);
+            //minMaxEstimator = _mlContext.Transforms.NormalizeMinMax("ConsumpredEnergy");
+            //_data = minMaxEstimator.Fit(_data).Transform(_data);
         }
 
         private void ReplaceMissingValue()
         {
-            var replacementEstimator = _mlContext.Transforms.ReplaceMissingValues("ProcessFrequency", replacementMode: MissingValueReplacingEstimator.ReplacementMode.Mean);
+            var replacementEstimator = _mlContext.Transforms.ReplaceMissingValues("Features", replacementMode: MissingValueReplacingEstimator.ReplacementMode.Mean);
             _data = replacementEstimator.Fit(_data).Transform(_data);
 
-            replacementEstimator = _mlContext.Transforms.ReplaceMissingValues("ThreadsNumber", replacementMode: MissingValueReplacingEstimator.ReplacementMode.Mean);
-            _data = replacementEstimator.Fit(_data).Transform(_data);
+            //replacementEstimator = _mlContext.Transforms.ReplaceMissingValues("ThreadsNumber", replacementMode: MissingValueReplacingEstimator.ReplacementMode.Mean);
+            //_data = replacementEstimator.Fit(_data).Transform(_data);
 
-            replacementEstimator = _mlContext.Transforms.ReplaceMissingValues("ConsumpredEnergy", replacementMode: MissingValueReplacingEstimator.ReplacementMode.Mean);
-            _data = replacementEstimator.Fit(_data).Transform(_data);
+            //replacementEstimator = _mlContext.Transforms.ReplaceMissingValues("ConsumpredEnergy", replacementMode: MissingValueReplacingEstimator.ReplacementMode.Mean);
+            //_data = replacementEstimator.Fit(_data).Transform(_data);
         }
 
         private void FilterData()
         {
-            _data = _mlContext.Data.FilterRowsByColumn(_data, "ProcessFrequency", lowerBound: 1200, upperBound: 2900);
+            //_data = _mlContext.Data.FilterRowsByColumn(_data, "ProcessFrequency", lowerBound: 1200, upperBound: 2900);
         }
 
         private void RemoveDublicates()
         {
-            //_data = 
-        }
-
-        public class DataVector
-        {
-            public double Label;
-            [VectorType(4)]
-            public List<double> Features;
         }
 
         public class CleanseQuery
         {
             public IFormFile file { get; set; }
             public CleanseParameters cleanseParams { get; set; }
+        }
+
+        private void InitializeParams()
+        {
+
         }
     }
 }

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpEvent, HttpParams } from '@angular/common/http';
 import { Observable, from } from 'rxjs';
-import {KmeansModel} from './shared/kmeans/kmeans-model'
+import { KmeansModel } from './shared/kmeans/kmeans-model'
 import { Centroid } from './shared/kmeans/centroid';
-import {GaussResponse} from './shared/gauss/gauss-response';
-import {Algorithms} from './shared/algorithms-model';
+import { GaussResponse } from './shared/gauss/gauss-response';
+import { Algorithms } from './shared/algorithms-model';
 
 
 
@@ -13,14 +13,14 @@ import {Algorithms} from './shared/algorithms-model';
 export class KmeansService{
 
     apiUrl: string;
-	constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
     getPoints( files: any, numberOfClusters: number, typeOfAlgorithm: Algorithms) : Observable<HttpEvent<KmeansModel>>{
         
         if(typeOfAlgorithm.valueOf() == 0){
             console.log('typeOfAlgorithm if', typeOfAlgorithm);
         }
-        else{
+        else {
             console.log('typeOfAlgorithm else', typeOfAlgorithm);
         }
         let fileToUpload = <File>files[0];
@@ -33,14 +33,15 @@ export class KmeansService{
         });
     }
 
-    getGaussianParam( centroids: Centroid, axisNumber: number) : Observable<HttpEvent<GaussResponse[]>>{
+    getGaussianParam(centroids: Centroid, axisNumber: number): Observable<HttpEvent<GaussResponse[]>> {
 
-        return this.http.post<GaussResponse[]>('http://localhost:3921/api/kmeans/getGaussParam',centroids, 
-        {params: new HttpParams().set('axisNumber',`${axisNumber}`),
-         reportProgress: true, 
-         observe: 'events'
-        });
+        return this.http.post<GaussResponse[]>('http://localhost:3921/api/kmeans/getGaussParam', centroids,
+            {
+                params: new HttpParams().set('axisNumber', `${axisNumber}`),
+                reportProgress: true,
+                observe: 'events'
+            });
     }
-    
+
 
 }
