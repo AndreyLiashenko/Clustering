@@ -41,6 +41,7 @@ namespace Clustering
                 c.IncludeXmlComments(xmlPath);
             });
             services.AddCors();
+            services.AddHttpClient();
 
             services.AddRepositories();
 
