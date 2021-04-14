@@ -12,6 +12,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 
 namespace Clustering.Controllers
 {
@@ -31,7 +32,7 @@ namespace Clustering.Controllers
 
         [Route("api/cleanse")]
         [HttpPost]
-        public string Post([FromForm(Name = "file")] IFormFile file, string cleanseParams)
+        public MemoryStream Post([FromForm(Name = "file")] IFormFile file, string cleanseParams)
         {
             var request = this.Request;
             var test = _getScvRows.GetLines(file);
@@ -81,8 +82,11 @@ namespace Clustering.Controllers
                 .CreateEnumerable<DataVector>(_data, reuseRowObject: false, schemaDefinition: schemaDef)
                 .ToList();
 
-
-            return enumerable.ToCsv();
+            //string fileName = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".csv";
+            //var myfile = System.IO.File.ReadAllBytes()
+            var result = enumerable.ToCsv();
+            var bytes = Encoding.ASCII.GetBytes(result);
+            return new MemoryStream(bytes);
         }
 
         private IFormFile ReturnFormFile(Stream result)
