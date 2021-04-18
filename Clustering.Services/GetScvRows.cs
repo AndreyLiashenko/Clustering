@@ -33,8 +33,9 @@ namespace Clustering.Services
                     csv.Configuration.HasHeaderRecord = true;
                     csv.Read();
                     csv.ReadHeader();
-                    string header = ((CsvFieldReader)((CsvParser)csv.Parser).FieldReader).Context.HeaderRecord.Single();
-                    listOfHeaders = header.Split(';').ToList();
+                    listOfHeaders = ((CsvFieldReader)((CsvParser)csv.Parser).FieldReader).Context.HeaderRecord.ToList();
+                    //string header = ((CsvFieldReader)((CsvParser)csv.Parser).FieldReader).Context.HeaderRecord.Single();
+                    //listOfHeaders = header.Split(';').ToList();
                 }
             }
             return listOfHeaders;
