@@ -36,7 +36,7 @@ namespace Clustering.Controllers
         {
             var request = this.Request;
             var test = _getScvRows.GetLines(file);
-            var columnNames = test[0];
+            var columnNames = _getScvRows.GetHeaders(file);
             var parameters = !string.IsNullOrEmpty(cleanseParams) ? JsonConvert.DeserializeObject<CleanseParameters>(cleanseParams) : new CleanseParameters();
 
             var lines = test.TransformRows()
@@ -74,7 +74,7 @@ namespace Clustering.Controllers
                         return null;
                     }
                     var res = response.Content.ReadAsStreamAsync().Result;
-                    file = ReturnFormFile(res);
+                    //columnNames = _getScvRows.GetHeaders(ReturnFormFile(res));
                 }
             }
 
@@ -82,10 +82,11 @@ namespace Clustering.Controllers
                 .CreateEnumerable<DataVector>(_data, reuseRowObject: false, schemaDefinition: schemaDef)
                 .ToList();
 
-            //string fileName = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".csv";
-            //var myfile = System.IO.File.ReadAllBytes()
+            
             var result = enumerable.ToCsv();
-            var bytes = Encoding.ASCII.GetBytes(result);
+            var header = string.Join(',', columnNames) + "\n";
+            header += result;
+            var bytes = Encoding.ASCII.GetBytes(header);
             return new MemoryStream(bytes);
         }
 
