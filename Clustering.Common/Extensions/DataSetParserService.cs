@@ -117,16 +117,17 @@ namespace Clustering.Helpers
         public static string ToCsv(this IEnumerable<DataVector> items)
         {
             var csvBuilder = new StringBuilder();
+            var list = items.ToList();
             var strings = new string[items.FirstOrDefault().Features.Length];
             for (int i = 0; i < items.FirstOrDefault().Features.Length; ++i)
             {
-                foreach (var item in items)
+                for (int j = 0; j < (list.Count - 1); j++)
                 {
-                    strings[i] += $"{item.Features[i].ToCsvValue()},";
+                    strings[i] += $"{list[j].Features[i].ToCsvValue()},";
                 }
-                //csvBuilder.AppendLine(line);
+                strings[i] += $"{list[list.Count - 1].Features[i].ToCsvValue()}";
             }
-            return string.Join(Environment.NewLine, strings);
+            return string.Join(Environment.NewLine, strings, 0, strings.Count() - 1) + strings.LastOrDefault();
         }
 
 
