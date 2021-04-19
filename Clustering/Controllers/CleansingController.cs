@@ -84,7 +84,7 @@ namespace Clustering.Controllers
 
             
             var result = enumerable.ToCsv();
-            var header = string.Join(',', columnNames, 0, columnNames.Count - 1) + columnNames.LastOrDefault() + Environment.NewLine;
+            var header = string.Join(',', columnNames.ToArray(), 0, columnNames.Count) + Environment.NewLine;
             header += result;
             var bytes = Encoding.ASCII.GetBytes(header);
             return new MemoryStream(bytes);
