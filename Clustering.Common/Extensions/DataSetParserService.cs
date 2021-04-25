@@ -127,7 +127,7 @@ namespace Clustering.Helpers
                 }
                 strings[i] += $"{list[list.Count - 1].Features[i].ToCsvValue()}";
             }
-            return string.Join(Environment.NewLine, strings, 0, strings.Count() - 1) + strings.LastOrDefault();
+            return string.Join(Environment.NewLine, strings, 0, strings.Count());
         }
 
 
