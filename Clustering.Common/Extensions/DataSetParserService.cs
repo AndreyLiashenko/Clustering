@@ -123,7 +123,7 @@ namespace Clustering.Helpers
             {
                 for (int j = 0; j < (list.Count - 1); j++)
                 {
-                    strings[i] += $"{list[j].Features[i].ToCsvValue()},";
+                    strings[i] += $"{list[j].Features[i]},";
                 }
                 strings[i] += $"{list[list.Count - 1].Features[i].ToCsvValue()}";
             }

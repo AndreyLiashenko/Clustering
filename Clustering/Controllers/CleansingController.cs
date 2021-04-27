@@ -128,8 +128,8 @@ namespace Clustering.Controllers
 
         private void NormalizeData()
         {
-            var minMaxEstimator = _mlContext.Transforms.NormalizeMinMax("Features");
-            _data = minMaxEstimator.Fit(_data).Transform(_data);
+            //var minMaxEstimator = _mlContext.Transforms.NormalizeMinMax("Features");
+            //_data = minMaxEstimator.Fit(_data).Transform(_data);
 
             //minMaxEstimator = _mlContext.Transforms.NormalizeMinMax("ThreadsNumber");
             //_data = minMaxEstimator.Fit(_data).Transform(_data);
