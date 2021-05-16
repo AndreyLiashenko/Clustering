@@ -33,9 +33,16 @@ namespace Clustering.Controllers
             _clientFactory = clientFactory;
         }
 
+        [Route("api/getHeaders")]
+        public List<string> GetHeaders([FromForm(Name = "file")] IFormFile file)
+        {
+            var columnNames = _getScvRows.GetHeaders(file);
+            return columnNames;
+        }
+
         [Route("api/cleanse")]
         [HttpPost]
-        public MemoryStream Post([FromForm(Name = "file")] IFormFile file, string cleanseParams)
+        public MemoryStream Post([FromForm(Name = "file")] IFormFile file, string cleanseParams, string headers = null)
         {
             var request = this.Request;
             var test = _getScvRows.GetLines(file);
@@ -45,7 +52,15 @@ namespace Clustering.Controllers
             var lines = test.TransformRows()
                 .Select((x, i) => new DataVector { Label = columnNames[i], Features = x.Select(f => new FeatureType { Value = f }).ToArray() })
                 .ToList();
-            _lines = lines;
+
+            _lines = lines.ToList();
+
+            if (!string.IsNullOrEmpty(headers))
+            {
+                var filterColumnHeaders = headers.Split(',');
+                _lines = _lines.Where(x => filterColumnHeaders.Contains(x.Label)).ToList();
+                columnNames = _lines.Select(x => x.Label).ToList();
+            }
 
             CleanData(parameters);
 
@@ -93,7 +108,7 @@ namespace Clustering.Controllers
 
         private void NormalizeData()
         {
-            foreach(var column in _lines)
+            foreach (var column in _lines)
             {
                 var data = _mlContext.Data.LoadFromEnumerable(column.Features);
                 var minMaxEstimator = _mlContext.Transforms.NormalizeMinMax("Value");
