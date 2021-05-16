@@ -9,6 +9,7 @@ using Microsoft.ML.Data;
 using Microsoft.ML.Transforms;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -22,6 +23,8 @@ namespace Clustering.Controllers
         private readonly IHttpClientFactory _clientFactory;
         private readonly MLContext _mlContext;
         private IDataView _data;
+
+        private List<DataVector> _lines;
 
         public CleansingController(IGetScvRows getScvRows, IHttpClientFactory clientFactory)
         {
@@ -40,73 +43,35 @@ namespace Clustering.Controllers
             var parameters = !string.IsNullOrEmpty(cleanseParams) ? JsonConvert.DeserializeObject<CleanseParameters>(cleanseParams) : new CleanseParameters();
 
             var lines = test.TransformRows()
-                .Select((x, i) => new DataVector { Label = i, Features = x.ToArray() })
+                .Select((x, i) => new DataVector { Label = columnNames[i], Features = x.Select(f => new FeatureType { Value = f }).ToArray() })
                 .ToList();
+            _lines = lines;
 
-            var schemaDef = SchemaDefinition.Create(typeof(DataVector), SchemaDefinition.Direction.Both);
-            using (var stream = file.OpenReadStream())
-            {
-                //var result = DataSetParserService.GetDataTabletFromCSVFile(stream, true);
-                //DataSet ds = new DataSet();
-                //ds.Tables.Add(result);
-                //DataViewManager dvManager = new DataViewManager(ds);
-
-                int numberOfFeatures = lines.FirstOrDefault().Features.Count();
-
-                schemaDef["Features"].ColumnType = new VectorDataViewType(NumberDataViewType.Double, numberOfFeatures);
-                _data = _mlContext.Data.LoadFromEnumerable<DataVector>(lines, schemaDef);
-            }
-
-            //https://docs.microsoft.com/en-us/dotnet/machine-learning/how-to-guides/prepare-data-ml-net
             CleanData(parameters);
 
-            using (var stream = file.OpenReadStream())
-            {
-                var actionUrl = "https://clustering-fuzzy.herokuapp.com/get_dummies/";
-                HttpContent fileStreamContent = new StreamContent(stream);
-                using (var client = new HttpClient())
-                using (var formData = new MultipartFormDataContent())
-                {
-                    formData.Add(fileStreamContent, "csv", "csv");
-                    var response = client.PostAsync(actionUrl, formData).Result;
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        return null;
-                    }
-                    var res = response.Content.ReadAsStreamAsync().Result;
-                    //columnNames = _getScvRows.GetHeaders(ReturnFormFile(res));
-                }
-            }
+            //using (var stream = file.OpenReadStream())
+            //{
+            //    var actionUrl = "https://clustering-fuzzy.herokuapp.com/get_dummies/";
+            //    HttpContent fileStreamContent = new StreamContent(stream);
+            //    using (var client = new HttpClient())
+            //    using (var formData = new MultipartFormDataContent())
+            //    {
+            //        formData.Add(fileStreamContent, "csv", "csv");
+            //        var response = client.PostAsync(actionUrl, formData).Result;
+            //        if (!response.IsSuccessStatusCode)
+            //        {
+            //            return null;
+            //        }
+            //        var res = response.Content.ReadAsStreamAsync().Result;
+            //        //columnNames = _getScvRows.GetHeaders(ReturnFormFile(res));
+            //    }
+            //}
 
-            var enumerable = _mlContext.Data
-                .CreateEnumerable<DataVector>(_data, reuseRowObject: false, schemaDefinition: schemaDef)
-                .ToList();
-
-            
-            var result = enumerable.ToCsv();
+            var result = _lines.ToCsv();
             var header = string.Join(',', columnNames.ToArray(), 0, columnNames.Count) + Environment.NewLine;
             header += result;
             var bytes = Encoding.ASCII.GetBytes(header);
             return new MemoryStream(bytes);
-        }
-
-        private IFormFile ReturnFormFile(Stream result)
-        {
-            var ms = new MemoryStream();
-            try
-            {
-                result.CopyTo(ms);
-                return new FormFile(ms, 0, ms.Length, "name", "csv");
-            }
-            catch (Exception e)
-            {
-                ms.Dispose();
-                throw;
-            }
-            finally
-            {
-                ms.Dispose();
-            }
         }
 
         private void CleanData(CleanseParameters parameters)
@@ -128,31 +93,48 @@ namespace Clustering.Controllers
 
         private void NormalizeData()
         {
-            //var minMaxEstimator = _mlContext.Transforms.NormalizeMinMax("Features");
-            //_data = minMaxEstimator.Fit(_data).Transform(_data);
-
-            //minMaxEstimator = _mlContext.Transforms.NormalizeMinMax("ThreadsNumber");
-            //_data = minMaxEstimator.Fit(_data).Transform(_data);
-
-            //minMaxEstimator = _mlContext.Transforms.NormalizeMinMax("ConsumpredEnergy");
-            //_data = minMaxEstimator.Fit(_data).Transform(_data);
+            foreach(var column in _lines)
+            {
+                var data = _mlContext.Data.LoadFromEnumerable(column.Features);
+                var minMaxEstimator = _mlContext.Transforms.NormalizeMinMax("Value");
+                data = minMaxEstimator.Fit(data).Transform(data);
+                column.Features = _mlContext.Data.CreateEnumerable<FeatureType>(data, reuseRowObject: false).ToArray();
+            }
         }
 
         private void ReplaceMissingValue()
         {
-            var replacementEstimator = _mlContext.Transforms.ReplaceMissingValues("Features", replacementMode: MissingValueReplacingEstimator.ReplacementMode.Mean);
-            _data = replacementEstimator.Fit(_data).Transform(_data);
-
-            //replacementEstimator = _mlContext.Transforms.ReplaceMissingValues("ThreadsNumber", replacementMode: MissingValueReplacingEstimator.ReplacementMode.Mean);
-            //_data = replacementEstimator.Fit(_data).Transform(_data);
-
-            //replacementEstimator = _mlContext.Transforms.ReplaceMissingValues("ConsumpredEnergy", replacementMode: MissingValueReplacingEstimator.ReplacementMode.Mean);
-            //_data = replacementEstimator.Fit(_data).Transform(_data);
+            foreach (var column in _lines)
+            {
+                var data = _mlContext.Data.LoadFromEnumerable(column.Features);
+                var replacementEstimator = _mlContext.Transforms.ReplaceMissingValues("Value", replacementMode: MissingValueReplacingEstimator.ReplacementMode.Mean);
+                data = replacementEstimator.Fit(data).Transform(data);
+                column.Features = _mlContext.Data.CreateEnumerable<FeatureType>(data, reuseRowObject: false).ToArray();
+            }
         }
 
         private void FilterData()
         {
+            //var schemaDef = SchemaDefinition.Create(typeof(DataVector), SchemaDefinition.Direction.Both);
+            //using (var stream = file.OpenReadStream())
+            //{
+            //var result = DataSetParserService.GetDataTabletFromCSVFile(stream, true);
+            //DataSet ds = new DataSet();
+            //ds.Tables.Add(result);
+            //DataViewManager dvManager = new DataViewManager(ds);
+
+            //int numberOfFeatures = lines.FirstOrDefault().Features.Count();
+
+            //schemaDef["Features"].ColumnType = new VectorDataViewType(NumberDataViewType.Double, numberOfFeatures);
+            //_data = _mlContext.Data.LoadFromEnumerable<DataVector>(lines, schemaDef);
+            //}
+
+            //https://docs.microsoft.com/en-us/dotnet/machine-learning/how-to-guides/prepare-data-ml-net
             //_data = _mlContext.Data.FilterRowsByColumn(_data, "ProcessFrequency", lowerBound: 1200, upperBound: 2900);
+
+            //var enumerable = _mlContext.Data
+            //    .CreateEnumerable<DataVector>(_data, reuseRowObject: false, schemaDefinition: schemaDef)
+            //    .ToList();
         }
 
         private void RemoveDublicates()

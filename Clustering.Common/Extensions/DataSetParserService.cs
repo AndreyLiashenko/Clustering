@@ -123,9 +123,9 @@ namespace Clustering.Helpers
             {
                 for (int j = 0; j < (list.Count - 1); j++)
                 {
-                    strings[i] += $"{list[j].Features[i]},";
+                    strings[i] += $"{list[j].Features[i].Value},";
                 }
-                strings[i] += $"{list[list.Count - 1].Features[i].ToCsvValue()}";
+                strings[i] += $"{list[list.Count - 1].Features[i].Value}";
             }
             return string.Join(Environment.NewLine, strings, 0, strings.Count());
         }

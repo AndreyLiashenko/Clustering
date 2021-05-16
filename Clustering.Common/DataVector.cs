@@ -4,8 +4,13 @@ namespace Clustering.Models
 {
     public class DataVector
     {
-        public double Label;
+        public string Label;
         [VectorType]
-        public double[] Features;
+        public FeatureType[] Features;
+    }
+
+    public class FeatureType
+    {
+        public double Value;
     }
 }
