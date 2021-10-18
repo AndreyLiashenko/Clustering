@@ -34,6 +34,7 @@ namespace Clustering.Controllers
         }
 
         [Route("api/getHeaders")]
+        [HttpPost]
         public List<string> GetHeaders([FromForm(Name = "file")] IFormFile file)
         {
             var columnNames = _getScvRows.GetHeaders(file);
