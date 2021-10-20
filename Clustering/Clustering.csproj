@@ -11,6 +11,7 @@
 
 
 	<ItemGroup>
+    <Folder Include="Export\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -39,6 +40,12 @@
     <ProjectReference Include="..\Clustering.Model\Clustering.Model.csproj" />
     <ProjectReference Include="..\Clustering.Services.Contracts\Clustering.Services.Contracts.csproj" />
     <ProjectReference Include="..\Clustering.Services\Clustering.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Export\empty_cleansing_file.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
