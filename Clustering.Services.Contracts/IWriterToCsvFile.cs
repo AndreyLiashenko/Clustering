@@ -1,12 +1,11 @@
-﻿using Csv;
-using System;
+﻿using Clustering.Models;
+using Csv;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Clustering.Services.Contracts
 {
 	public interface IWriterToCsvFile
 	{
-		byte[] Write(string path, List<ICsvLine> data, List<string> columnNames);
+		byte[] CleansingDataWriteToFile(string path, List<DataVector> data);
 	}
 }

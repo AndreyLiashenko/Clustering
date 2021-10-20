@@ -1,16 +1,18 @@
-﻿using Clustering.Services.Contracts;
+﻿using Clustering.Models;
+using Clustering.Services.Contracts;
 using Csv;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Clustering.Services
 {
 	public class WriterToCsvFile : IWriterToCsvFile
 	{
-		public byte[] Write(string path, List<ICsvLine> data, List<string> columnNames)
+		public byte[] CleansingDataWriteToFile(string path, List<DataVector> data)
 		{
             using (var memStream = new MemoryStream())
             {
@@ -21,21 +23,21 @@ namespace Clustering.Services
                 {
                     using (CsvHelper.CsvWriter csvWriter = new CsvHelper.CsvWriter(streamWriter, CultureInfo.CurrentCulture))
                     {
-                        foreach (var headerColumn in columnNames)
-                        {
-                            csvWriter.WriteField(headerColumn);
-                        }
+						foreach (var headerColumn in data)
+						{
+							csvWriter.WriteField(headerColumn.Label);
+						}
 
-                        csvWriter.NextRecord();
+						csvWriter.NextRecord();
 
-                        foreach (var item in data)
-                        {
-                            foreach (var str in item.Values)
+                        for(int i = 0; i < data.FirstOrDefault().Features.Length; i++)
+						{
+                            for (int j = 0; j < data.Count; j++)
                             {
-                                csvWriter.WriteField(str);
+                                csvWriter.WriteField(data[j].Features[i].Value.ToString());
                             }
-                            csvWriter.NextRecord();
 
+                            csvWriter.NextRecord();
                         }
                     }
                 }

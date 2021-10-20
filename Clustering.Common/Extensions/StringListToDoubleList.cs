@@ -23,7 +23,7 @@ namespace Clustering.Common.Extensions
                 foreach (var point in line.Values)
                 {
                     if (!string.IsNullOrEmpty(point))
-                        doublePoints.Add(double.Parse(point, CultureInfo.InvariantCulture));
+                        doublePoints.Add(double.Parse(point, CultureInfo.CurrentCulture));
                     else doublePoints.Add(float.NaN);
                 }
                 points.Add(doublePoints);

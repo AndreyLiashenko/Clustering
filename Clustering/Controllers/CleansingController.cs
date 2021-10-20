@@ -110,7 +110,7 @@ namespace Clustering.Controllers
             //return new MemoryStream(bytes);
 
             var path = _webHostEnvironment.ContentRootPath + $"/Export/{exportFile}";
-            var byteArray = _writerToCsvFile.Write(path, data, columnNames);
+            var byteArray = _writerToCsvFile.CleansingDataWriteToFile(path, _lines);
             return BuildExportResponse(byteArray, "Cleansing.csv");
         }
 
