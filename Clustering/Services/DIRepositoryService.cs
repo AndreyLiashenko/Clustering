@@ -12,6 +12,7 @@ namespace Clustering.Services
         public static void AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IGetScvRows, GetCsvRows>();
+            services.AddScoped<IWriterToCsvFile, WriterToCsvFile>();
             services.AddScoped<IAlgorithmService, AlgorithmService>();
             services.AddScoped<IClusteringService, ClusteringService>();
             services.AddScoped<IDataService, DataService>();
