@@ -69,18 +69,18 @@ namespace Clustering.Controllers
 
             _lines = lines.ToList();
 
-            // NEED TO REFACTORING
+            /* NEED TO REFACTORING
 
             //if (!string.IsNullOrEmpty(headers))
             //{
             //    var filterColumnHeaders = headers.Split(',');
             //    _lines = _lines.Where(x => filterColumnHeaders.Contains(x.Label)).ToList();
             //    columnNames = _lines.Select(x => x.Label).ToList();
-            //}
+            //}*/
 
             CleanData(parameters);
 
-            // NEED TO REFACTORING
+            /* NEED TO REFACTORING
 
             //using (var stream = file.OpenReadStream())
             //{
@@ -107,11 +107,30 @@ namespace Clustering.Controllers
 
             // NEED TO REFACTORING
             //var bytes = Encoding.ASCII.GetBytes(header);
-            //return new MemoryStream(bytes);
+            //return new MemoryStream(bytes);*/
 
             var path = _webHostEnvironment.ContentRootPath + $"/Export/{exportFile}";
             var byteArray = _writerToCsvFile.CleansingDataWriteToFile(path, _lines);
             return BuildExportResponse(byteArray, "Cleansing.csv");
+        }
+
+        [Route("api/normalize")]
+        [HttpPost]
+        public IActionResult Post([FromForm] NormalizationRequest request)
+        {
+            var data = _getScvRows.GetLines(request.File);
+            var columnNames = _getScvRows.GetHeaders(request.File);
+            var lines = data.TransformRows()
+                .Select((x, i) => new DataVector { Label = columnNames[i], Features = x.Select(f => new FeatureType { Value = f }).ToArray() })
+                .ToList();
+
+            _lines = lines.ToList();
+
+            NormalizeData();
+
+            var path = _webHostEnvironment.ContentRootPath + $"/Export/{exportFile}";
+            var byteArray = _writerToCsvFile.CleansingDataWriteToFile(path, _lines);
+            return BuildExportResponse(byteArray, "Normalized.csv");
         }
 
         private void CleanData(CleanseParameters parameters)
