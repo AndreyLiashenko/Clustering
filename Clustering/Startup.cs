@@ -81,10 +81,10 @@ namespace Clustering
             app.Run(async (context) =>
             {
                 context.Response.ContentType = "text/html";
-                if (string.IsNullOrWhiteSpace(env.WebRootPath))
-                {
-                    env.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-                }
+                //if (string.IsNullOrWhiteSpace(env.WebRootPath))
+                //{
+                //    env.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+                //}
                 await context.Response.SendFileAsync(Path.Combine(env.WebRootPath, "index.html"));
             });
         }
